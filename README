@@ -1,0 +1,25 @@
+Register Machine
+================
+
+Example
+-------
+
+> (use-modules (register-machine))
+> (define factorial-machine
+    (make-machine
+     '(ax bx)
+     (list (list '= =) (list '- -) (list '* *))
+     '(main
+       (assign bx (const 1))               ; output stored in bx
+       (assign ax (const 10))              ; input stored in ax
+       L0
+       (test (op =) (reg ax) (const 0))
+       (branch (label exit))
+       (assign bx (op *) (reg bx) (reg ax))
+       (assign ax (op -) (reg ax) (const 1))
+       (goto (label L0))
+       exit)))
+> (start factorial-machine)
+done
+> (get-register-contents factorial-machine 'bx)
+3628800
